@@ -1,10 +1,24 @@
-// 🐨 you're gonna need this stuff:
-// import {Modal, ModalContents, ModalOpenButton} from '../modal'
+import * as React from 'react'
+import {render, screen} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import {Modal, ModalContents, ModalOpenButton} from '../modal'
 
-test.todo('can be opened and closed')
-// 🐨 render the Modal, ModalOpenButton, and ModalContents
-// 🐨 click the open button
-// 🐨 verify the modal contains the modal contents, title, and label
-// 🐨 click the close button
-// 🐨 verify the modal is no longer rendered
-// 💰 (use `query*` rather than `get*` or `find*` queries to verify it is not rendered)
+test('can be opened and closed', () => {})
+render(
+  <Modal>
+    <ModalOpenButton>
+      <button>Open</button>
+    </ModalOpenButton>
+    <ModalContents aria-label="My Label" title="My Title">
+      My Contents
+    </ModalContents>
+  </Modal>,
+)
+
+userEvent.click(screen.getByRole('button', {name: /Open/}))
+expect(screen.getByText('My Contents')).toBeInTheDocument()
+expect(screen.getByLabelText('My Label')).toBeInTheDocument()
+expect(screen.getByRole('heading').textContent).toBe('My Title')
+
+userEvent.click(screen.getByRole('button'), {name: /Close/})
+expect(screen.queryByLabelText('My Label')).not.toBeInTheDocument()
